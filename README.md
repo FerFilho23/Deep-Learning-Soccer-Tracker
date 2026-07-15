@@ -1,1 +1,1 @@
-# Deep-Learning-Soccer-Tracker
+# Deep Learning Soccer Tracker
