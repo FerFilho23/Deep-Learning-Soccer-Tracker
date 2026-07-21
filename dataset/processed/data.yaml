@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['football', 'player', 'referee']
+
+roboflow:
+  workspace: fernandos-workspace-qvgl0
+  project: deep-learning-soccer-tracker
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/fernandos-workspace-qvgl0/deep-learning-soccer-tracker/dataset/1
