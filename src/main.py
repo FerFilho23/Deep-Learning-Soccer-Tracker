@@ -9,7 +9,7 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--model",
     type=str,
-    default="runs/detect/yolo26n_baseline_960/weights/best.pt",
+    default="runs/detect/yolo26n_baseline_1080/weights/best.pt",
     help="Path to the YOLO model file",
 )
 p.add_argument(
@@ -23,7 +23,7 @@ p.add_argument(
     action="store_true",
     help="Enable streaming mode",
 ),
-p.add_argument("--img-size", type=int, default=960, help="Image size for inference")
+p.add_argument("--img-size", type=int, default=1080, help="Image size for inference")
 p.add_argument(
     "--conf-thres", type=float, default=0.25, help="Confidence threshold for detections"
 )
