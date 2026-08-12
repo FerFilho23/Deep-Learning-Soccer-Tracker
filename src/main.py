@@ -3,6 +3,8 @@ import os
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 import argparse, cv2, torch, time
 from ultralytics import YOLO
+from scripts.annotators import draw_annotations, jersey_color
+from scripts.team_tracker import TeamTracker
 
 # Set up argument parser
 p = argparse.ArgumentParser()
@@ -62,6 +64,8 @@ fps = 30.0
 
 writer, frames = None, 0
 
+team_tracker = TeamTracker()
+
 for r in YOLO(args.model).predict(
     source=src,
     imgsz=args.img_size,
@@ -70,7 +74,15 @@ for r in YOLO(args.model).predict(
     stream=True,
     verbose=False,
 ):
-    img = r.plot()
+    img = r.orig_img.copy()
+
+    b, c, n = r.boxes.xyxy.cpu().numpy(), r.boxes.cls.cpu().numpy(), r.names
+
+    colors = [jersey_color(img, int(x[0]), int(x[1]), int(x[2]), int(x[3])) for x in b]
+
+    team_ids, team_colors = team_tracker.assign(colors)
+
+    draw_annotations(img, b, c, n, team_ids, team_colors)
 
     if is_img:
         cv2.imwrite("output/result.jpg", img)
