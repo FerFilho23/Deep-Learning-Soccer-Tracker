@@ -7,17 +7,22 @@ class TeamTracker:
         self.cents, self.alpha = None, ema_alpha
 
     def assign(self, colors):
+        """Assigns team IDs based on jersey colors using k-means clustering and exponential moving average for centroid updates."""
+
+        # Find the indices of valid colors (non-None)
         v_idx = [i for i, c in enumerate(colors) if c]
         res, fall = [-1] * len(colors), [(220, 80, 60), (60, 80, 220)]
         if len(v_idx) < 2:
             return res, fall
 
+        # Perform k-means clustering
         pts = np.array([colors[i] for i in v_idx], dtype=np.float32)
         if self.cents is None:
             _, _, self.cents = cv2.kmeans(
                 pts, 2, None, (3, 20, 0.5), 5, cv2.KMEANS_PP_CENTERS
             )
 
+        # Assign each point to the closest centroid
         lbls = np.linalg.norm(pts[:, None] - self.cents, axis=2).argmin(axis=1)
 
         for t in range(2):

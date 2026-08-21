@@ -74,10 +74,13 @@ for r in YOLO(args.model).predict(
     stream=True,
     verbose=False,
 ):
+
     img = r.orig_img.copy()
 
+    # Get the bounding boxes, class IDs, and class names
     b, c, n = r.boxes.xyxy.cpu().numpy(), r.boxes.cls.cpu().numpy(), r.names
 
+    # Get the jersey colors
     colors = [jersey_color(img, int(x[0]), int(x[1]), int(x[2]), int(x[3])) for x in b]
 
     team_ids, team_colors = team_tracker.assign(colors)
@@ -85,6 +88,7 @@ for r in YOLO(args.model).predict(
     draw_annotations(img, b, c, n, team_ids, team_colors)
 
     if is_img:
+        # TODO: Add option to save image with a different name or in a different directory
         cv2.imwrite("output/result.jpg", img)
         print("Result saved to output/result.jpg")
         break
